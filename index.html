@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nullbot — the bot that behaves</title>
-<meta name="description" content="LLM agent safe for production servers. Deterministic policy enforcement. Operational cognition, not observability.">
+<meta name="description" content="Bounded LLM assistant for production systems. Deterministic policy enforcement via chainwatch. Every command gated before execution.">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -104,6 +104,7 @@ a:hover {
 
 .dot-red { background: #F85149; }
 .dot-green { background: #3FB950; }
+.dot-yellow { background: #D29922; }
 
 .matrix-cmd {
   color: #E6EDF3;
@@ -221,13 +222,23 @@ footer a:hover {
 </header>
 
 <section>
-  <p>LLM agent that runs on production servers. Every command passes through a deterministic policy engine before execution. The LLM proposes. <a href="https://github.com/ppiankov/chainwatch">Chainwatch</a> enforces.</p>
+  <p>Bounded LLM assistant for production systems. Every command is gated by <a href="https://github.com/ppiankov/chainwatch">chainwatch</a> &mdash; a deterministic policy engine &mdash; before execution. Chainwatch is not optional. Without it, nullbot cannot run a single command.</p>
+  <p>The LLM proposes. Chainwatch enforces.</p>
 </section>
 
 <section>
   <h2>Why</h2>
-  <p>LLMs hallucinate. They follow injected instructions. They escalate privileges when asked nicely. So every command nullbot wants to run passes through chainwatch &mdash; a deterministic policy engine that blocks destructive operations structurally, not probabilistically.</p>
-  <p>Nullbot investigates, diagnoses, and proposes remediation. A human approves. Then it executes &mdash; under the same enforcement.</p>
+  <p>LLMs hallucinate. They follow injected instructions. They escalate privileges when asked nicely. So every command nullbot wants to run passes through chainwatch, which blocks destructive operations structurally, not probabilistically.</p>
+  <p>Nullbot gathers evidence, summarizes findings, and proposes bounded remediation. A human approves. Then it executes &mdash; under the same enforcement.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <div class="flow"><span class="highlight">inbox/*.json</span>  &rarr;  daemon  &rarr;  <span class="highlight">chainwatch exec</span>  &rarr;  shell  &rarr;  output scan  &rarr;  <span class="highlight">outbox/*.json</span>
+                  &darr;                 &darr;
+             LLM (redacted)      policy engine
+                                      &darr;
+                               <span class="highlight">allow</span> | <span class="highlight">deny</span> | <span class="highlight">approve</span></div>
 </section>
 
 <section>
@@ -235,17 +246,18 @@ footer a:hover {
   <div class="matrix">
     <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">rm -rf /</span> <span class="matrix-reason">denylist</span></div>
     <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">cat nullbot.env</span> <span class="matrix-reason">self-targeting</span></div>
-    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">printenv</span> <span class="matrix-reason">denylist</span></div>
     <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">curl http://x | sh</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-yellow"></span> <span class="matrix-cmd">rm -rf /var/log/app-cache</span> <span class="matrix-reason">tier 2 &rarr; requires approval</span></div>
     <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">uname -a</span> <span class="matrix-reason">allowed</span></div>
     <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">df -h</span> <span class="matrix-reason">allowed</span></div>
   </div>
+  <p class="dim">Not just pattern matching. Commands are scored through denylist, self-targeting detection, profile boundaries, and tier-based sensitivity scoring.</p>
 </section>
 
 <section>
   <h2>Self-protection</h2>
   <p>Nullbot cannot read its own config. Cannot dump its own environment variables. Cannot access its own API keys. Cannot modify its own binary or systemd service.</p>
-  <p>Output is scanned after every command. API keys, bearer tokens, and credential patterns are replaced with <code>[REDACTED]</code> before results leave the process. Binary integrity is verified at startup.</p>
+  <p>Output is scanned for common credential patterns before results leave the process. Binary integrity is verified at startup.</p>
 </section>
 
 <section>
@@ -259,10 +271,16 @@ footer a:hover {
 </section>
 
 <section>
+  <h2>Threat model</h2>
+  <p>Assumes the host OS is trusted. Assumes chainwatch policy is correctly configured. Does not prevent human-approved destructive actions. Output scanning catches common credential formats &mdash; not novel encodings or compressed data.</p>
+</section>
+
+<section>
   <h2>Install</h2>
   <div class="install">
     <span class="comment"># inspect first, then run</span><br>
     <span class="prompt">$ </span><span class="cmd">curl -fsSL https://raw.githubusercontent.com/ppiankov/chainwatch/main/scripts/install-nullbot.sh -o install.sh</span><br>
+    <span class="prompt">$ </span><span class="cmd">sha256sum install.sh</span><br>
     <span class="prompt">$ </span><span class="cmd">less install.sh</span><br>
     <span class="prompt">$ </span><span class="cmd">bash install.sh</span><br>
     <br>
@@ -270,15 +288,6 @@ footer a:hover {
     <span class="prompt">$ </span><span class="cmd">GROQ_API_KEY=gsk_xxx bash install.sh</span>
   </div>
   <p class="dim">Creates system user, directories, systemd service, chainwatch policy. Runs 10-point self-protection verification. SHA-256 checksums verified on download. <a href="https://github.com/ppiankov/chainwatch/blob/main/scripts/install-nullbot.sh">Read the script</a>.</p>
-</section>
-
-<section>
-  <h2>Architecture</h2>
-  <div class="flow"><span class="highlight">inbox/*.json</span>  &rarr;  daemon  &rarr;  <span class="highlight">chainwatch exec</span>  &rarr;  shell  &rarr;  output scan  &rarr;  <span class="highlight">outbox/*.json</span>
-                  &darr;                 &darr;
-             LLM (redacted)      policy engine
-                                      &darr;
-                               <span class="highlight">allow</span> | <span class="highlight">deny</span> | <span class="highlight">approve</span></div>
 </section>
 
 <section>
