@@ -284,7 +284,6 @@ footer a:hover {
     <li><strong>Pattern-based secret detection only.</strong> Scans for gsk_, sk-, AKIA, bearer tokens. Novel formats may pass</li>
     <li><strong>Base64 secrets pass through.</strong> Output scanning is plaintext pattern matching</li>
     <li><strong>DNS exfiltration vector.</strong> Egress restricted by nftables but DNS is allowed</li>
-    <li><strong>Symlink defense is parse-based.</strong> Non-JSON targets fail validation, not structural prevention</li>
     <li><strong>No replay protection.</strong> Re-submitted work orders re-execute. Dedup planned</li>
     <li><strong>systemd trust assumed.</strong> Root compromise breaks containment</li>
     <li><strong>Binary integrity needs build-time hash.</strong> Dev builds skip the check</li>
@@ -317,6 +316,7 @@ footer a:hover {
   <div>Autonomy, Contained.</div>
   <div class="footer-links">
     <a href="https://github.com/ppiankov/chainwatch">GitHub</a>
+    <a href="/tests">Test Results</a>
     <a href="https://github.com/ppiankov/chainwatch/blob/main/LICENSE">MIT License</a>
   </div>
 </footer>

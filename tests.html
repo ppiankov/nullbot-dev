@@ -200,8 +200,8 @@ footer a:hover {
       </tr>
       <tr>
         <td class="test-id">T02</td>
-        <td><span class="test-name">Symlink attack on inbox</span><br><span class="test-desc">Symlink to /etc/shadow &rarr; fails JSON parse</span></td>
-        <td class="status-documented">PASS*</td>
+        <td><span class="test-name">Symlink attack on inbox</span><br><span class="test-desc">Symlink rejected by lstat check before read</span></td>
+        <td class="status-pass">PASS</td>
       </tr>
       <tr>
         <td class="test-id">T03</td>
@@ -305,7 +305,6 @@ footer a:hover {
 
 <section>
   <h2>Documented Limitations</h2>
-  <p><strong>PASS*</strong> &mdash; defense is validation-based (non-JSON targets fail parse), not structural symlink prevention.</p>
   <p><strong>KNOWN</strong> &mdash; acknowledged in the <a href="https://github.com/ppiankov/chainwatch/blob/main/docs/security-model.md">security model</a>. These are explicit design boundaries, not bugs.</p>
   <p class="dim">Base64-encoded secrets pass through output scanning. Chainwatch is a deterministic policy engine, not a DLP system. Replay protection is planned. systemd config is trusted (root-only). Full list: <a href="/#limitations">current limitations</a>.</p>
 </section>
