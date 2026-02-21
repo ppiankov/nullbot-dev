@@ -234,11 +234,11 @@ footer a:hover {
 
 <section>
   <h2>Architecture</h2>
-  <div class="flow"><span class="highlight">inbox/*.json</span>  &rarr;  daemon  &rarr;  <span class="highlight">chainwatch exec</span>  &rarr;  shell  &rarr;  output scan  &rarr;  <span class="highlight">outbox/*.json</span>
-                  &darr;                 &darr;
-             LLM (redacted)      policy engine
-                                      &darr;
-                               <span class="highlight">allow</span> | <span class="highlight">deny</span> | <span class="highlight">approve</span></div>
+  <div class="flow"><span class="highlight">inbox</span> &rarr; daemon &rarr; <span class="highlight">chainwatch</span> &rarr; shell &rarr; scan &rarr; <span class="highlight">outbox</span>
+          &darr;             &darr;
+     LLM (redacted)  policy engine
+                          &darr;
+                   <span class="highlight">allow</span> | <span class="highlight">deny</span> | <span class="highlight">approve</span></div>
 </section>
 
 <section>
@@ -273,6 +273,22 @@ footer a:hover {
 <section>
   <h2>Threat model</h2>
   <p>Assumes the host OS is trusted. Assumes chainwatch policy is correctly configured. Does not prevent human-approved destructive actions. Output scanning catches common credential formats &mdash; not novel encodings or compressed data.</p>
+</section>
+
+<section id="limitations">
+  <h2>Current limitations</h2>
+  <p>Documented honestly, not hidden.</p>
+  <ul class="not-list">
+    <li><strong>Single LLM provider.</strong> No failover yet. Provider down means evidence is cached and retried later</li>
+    <li><strong>No rate limiting on LLM calls.</strong> Burst jobs can saturate the provider API</li>
+    <li><strong>AWS key pattern not detected.</strong> Scans for gsk_, sk-, bearer tokens. AKIA is a gap</li>
+    <li><strong>Base64 secrets pass through.</strong> Output scanning is plaintext pattern matching</li>
+    <li><strong>DNS exfiltration vector.</strong> Egress restricted by nftables but DNS is allowed</li>
+    <li><strong>Symlink defense is parse-based.</strong> Non-JSON targets fail validation, not structural prevention</li>
+    <li><strong>No replay protection.</strong> Re-submitted work orders re-execute. Dedup planned</li>
+    <li><strong>systemd trust assumed.</strong> Root compromise breaks containment</li>
+    <li><strong>Binary integrity needs build-time hash.</strong> Dev builds skip the check</li>
+  </ul>
 </section>
 
 <section>
