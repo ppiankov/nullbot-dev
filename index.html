@@ -280,7 +280,6 @@ footer a:hover {
   <p>Documented honestly, not hidden.</p>
   <ul class="not-list">
     <li><strong>Single LLM provider by default.</strong> Neurorouter supports multi-target failover, but daemon config only wires one provider</li>
-    <li><strong>No LLM rate limit in daemon config.</strong> Neurorouter supports client-side rate limiting, not yet wired into daemon</li>
     <li><strong>Pattern-based secret detection only.</strong> Covers AWS, GitHub, Slack, OpenAI, Groq, Anthropic, PEM keys, connection strings, bearer tokens. Novel formats may pass</li>
     <li><strong>Base64 secrets pass through.</strong> Output scanning is plaintext pattern matching</li>
     <li><strong>DNS exfiltration vector.</strong> Egress restricted by nftables but DNS is allowed</li>
