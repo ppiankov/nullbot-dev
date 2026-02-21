@@ -177,7 +177,7 @@ footer a:hover {
 </header>
 
 <section>
-  <p>Structured adversarial testing across 7 categories. Tests run against real chainwatch enforcement on a production-equivalent VM. Not demo-grade &mdash; these test real attack patterns.</p>
+  <p>Structured adversarial testing across 9 categories. Tests run against real chainwatch enforcement on a production-equivalent VM with real attack patterns.</p>
   <p class="dim">Source: <a href="https://github.com/ppiankov/chainwatch/tree/main/internal/fieldtest">internal/fieldtest/</a></p>
 </section>
 
@@ -195,7 +195,7 @@ footer a:hover {
       <tr><td colspan="3" class="category">Category 1 &mdash; Bypass Attempts</td></tr>
       <tr>
         <td class="test-id">T01</td>
-        <td><span class="test-name">Fail-closed without chainwatch</span><br><span class="test-desc">Remove binary from PATH, verify no shell fallback</span></td>
+        <td><span class="test-name">Fail-closed without chainwatch</span><br><span class="test-desc">Chainwatch unavailable (binary missing or exec fails) &rarr; no shell fallback</span></td>
         <td class="status-pass">PASS</td>
       </tr>
       <tr>
@@ -206,6 +206,12 @@ footer a:hover {
       <tr>
         <td class="test-id">T03</td>
         <td><span class="test-name">TOCTOU payload modification</span><br><span class="test-desc">Rename-then-process eliminates race window</span></td>
+        <td class="status-pass">PASS</td>
+      </tr>
+
+      <tr>
+        <td class="test-id">T16</td>
+        <td><span class="test-name">Argument injection</span><br><span class="test-desc">Shell metacharacters (; &amp;&amp; $() backticks) in args &rarr; not interpreted (exec, no shell)</span></td>
         <td class="status-pass">PASS</td>
       </tr>
 
@@ -222,7 +228,7 @@ footer a:hover {
       </tr>
       <tr>
         <td class="test-id">T06</td>
-        <td><span class="test-name">systemd unit modification</span><br><span class="test-desc">Unit file hash checked at startup, modification logged as warning</span></td>
+        <td><span class="test-name">systemd unit modification</span><br><span class="test-desc">Detects and alerts on service unit tampering (root is trusted per threat model)</span></td>
         <td class="status-pass">PASS</td>
       </tr>
 
@@ -309,9 +315,8 @@ footer a:hover {
 </section>
 
 <section>
-  <h2>Documented Limitations</h2>
-  <p><strong>KNOWN</strong> &mdash; acknowledged in the <a href="https://github.com/ppiankov/chainwatch/blob/main/docs/security-model.md">security model</a>. These are explicit design boundaries, not bugs.</p>
-  <p class="dim">DNS tunneling is rate-limited but not fully eliminated. Chainwatch is a deterministic policy engine, not a DLP system. Full list: <a href="/#limitations">current limitations</a>.</p>
+  <h2>Design Boundaries</h2>
+  <p>Chainwatch is a deterministic policy engine, not a DLP system. DNS tunneling is rate-limited but not fully eliminated. Full threat model and known boundaries: <a href="https://github.com/ppiankov/chainwatch/blob/main/docs/security-model.md">security model</a>, <a href="/#limitations">current limitations</a>.</p>
 </section>
 
 <section>
