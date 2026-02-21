@@ -279,8 +279,8 @@ footer a:hover {
   <h2>Current limitations</h2>
   <p>Documented honestly, not hidden.</p>
   <ul class="not-list">
-    <li><strong>Single LLM provider.</strong> No failover yet. Provider down means evidence is cached and retried later</li>
-    <li><strong>No rate limiting on LLM calls.</strong> Burst jobs can saturate the provider API</li>
+    <li><strong>Single LLM provider by default.</strong> Neurorouter supports multi-target failover, but daemon config only wires one provider</li>
+    <li><strong>No LLM rate limit in daemon config.</strong> Neurorouter supports client-side rate limiting, not yet wired into daemon</li>
     <li><strong>Pattern-based secret detection only.</strong> Scans for gsk_, sk-, AKIA, bearer tokens. Novel formats may pass</li>
     <li><strong>Base64 secrets pass through.</strong> Output scanning is plaintext pattern matching</li>
     <li><strong>DNS exfiltration vector.</strong> Egress restricted by nftables but DNS is allowed</li>
