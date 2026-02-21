@@ -228,8 +228,8 @@ footer a:hover {
 
 <section>
   <h2>Why</h2>
-  <p>LLMs hallucinate. They follow injected instructions. They escalate privileges when asked nicely. So every command nullbot wants to run passes through chainwatch, which blocks destructive operations structurally, not probabilistically.</p>
-  <p>Nullbot gathers evidence, summarizes findings, and proposes bounded remediation. A human approves. Then it executes &mdash; under the same enforcement.</p>
+  <p>LLMs hallucinate. They follow injected instructions. They attempt unsafe privilege escalation if not constrained. So every command nullbot wants to run passes through chainwatch, which blocks destructive operations structurally, not probabilistically.</p>
+  <p>Nullbot gathers evidence, summarizes findings, and proposes bounded remediation. A human approves. Then it executes &mdash; under the same enforcement. Approval does not bypass chainwatch. All approved commands are still subject to policy evaluation.</p>
 </section>
 
 <section>
@@ -256,7 +256,7 @@ footer a:hover {
 
 <section>
   <h2>Self-protection</h2>
-  <p>Nullbot cannot read its own config. Cannot dump its own environment variables. Cannot access its own API keys. Cannot modify its own binary or systemd service.</p>
+  <p>Nullbot is blocked from reading its own config, dumping its own environment variables, accessing its own API keys, or modifying its own binary. It runs as a dedicated system user with no login shell and minimal filesystem access.</p>
   <p>Output is scanned for common credential patterns before results leave the process. Binary integrity is verified at startup.</p>
 </section>
 
