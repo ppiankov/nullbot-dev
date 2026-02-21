@@ -284,7 +284,7 @@ footer a:hover {
     <li><strong>Pattern-based secret detection only.</strong> Covers AWS, GitHub, Slack, OpenAI, Groq, Anthropic, PEM keys, connection strings, bearer tokens. Novel formats may pass</li>
     <li><strong>Base64 secrets pass through.</strong> Output scanning is plaintext pattern matching</li>
     <li><strong>DNS exfiltration vector.</strong> Egress restricted by nftables but DNS is allowed</li>
-    <li><strong>systemd trust assumed.</strong> Root compromise breaks containment</li>
+    <li><strong>Root compromise is game over.</strong> Unit file hash check detects modification, but root can bypass all userspace security</li>
   </ul>
 </section>
 
