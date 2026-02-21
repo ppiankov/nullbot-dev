@@ -239,8 +239,8 @@ footer a:hover {
       </tr>
       <tr>
         <td class="test-id">T07b</td>
-        <td><span class="test-name">Base64-encoded secrets</span><br><span class="test-desc">Documented limitation &mdash; not a DLP system</span></td>
-        <td class="status-documented">KNOWN</td>
+        <td><span class="test-name">Base64-encoded secrets</span><br><span class="test-desc">Base64 decoded and re-scanned against all secret patterns</span></td>
+        <td class="status-pass">PASS</td>
       </tr>
 
       <tr><td colspan="3" class="category">Category 4 &mdash; Prompt Injection</td></tr>
@@ -299,6 +299,11 @@ footer a:hover {
         <td><span class="test-name">Egress to LLM API allowed</span><br><span class="test-desc">curl api.groq.com from nullbot user &rarr; connects</span></td>
         <td class="status-pass">PASS</td>
       </tr>
+      <tr>
+        <td class="test-id">E03</td>
+        <td><span class="test-name">DNS exfiltration rate-limited</span><br><span class="test-desc">Bulk DNS queries throttled by nftables rate limit</span></td>
+        <td class="status-pass">PASS</td>
+      </tr>
     </tbody>
   </table>
 </section>
@@ -306,7 +311,7 @@ footer a:hover {
 <section>
   <h2>Documented Limitations</h2>
   <p><strong>KNOWN</strong> &mdash; acknowledged in the <a href="https://github.com/ppiankov/chainwatch/blob/main/docs/security-model.md">security model</a>. These are explicit design boundaries, not bugs.</p>
-  <p class="dim">Base64-encoded secrets pass through output scanning. Chainwatch is a deterministic policy engine, not a DLP system. Replay protection is planned. systemd config is trusted (root-only). Full list: <a href="/#limitations">current limitations</a>.</p>
+  <p class="dim">DNS tunneling is rate-limited but not fully eliminated. Chainwatch is a deterministic policy engine, not a DLP system. Full list: <a href="/#limitations">current limitations</a>.</p>
 </section>
 
 <section>
