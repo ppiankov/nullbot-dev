@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nullbot — the bot that behaves</title>
-<meta name="description" content="Bounded LLM assistant for production systems. Deterministic policy enforcement via chainwatch. Every command gated before execution.">
+<meta name="description" content="Deterministically gated operational assistant for production systems. Policy enforcement via chainwatch. Every command gated before execution.">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -222,8 +222,8 @@ footer a:hover {
 </header>
 
 <section>
-  <p>Bounded LLM assistant for production systems. Every command is gated by <a href="https://github.com/ppiankov/chainwatch">chainwatch</a> &mdash; a deterministic policy engine &mdash; before execution. Chainwatch is not optional. Without it, nullbot cannot run a single command.</p>
-  <p>The LLM proposes. Chainwatch enforces.</p>
+  <p>Deterministically gated operational assistant for production systems. Every command is gated by <a href="https://github.com/ppiankov/chainwatch">chainwatch</a> &mdash; a deterministic policy engine &mdash; before execution. Chainwatch is not optional. Without it, nullbot cannot run a single command.</p>
+  <p>The LLM proposes. Chainwatch decides. Determinism first, language models second.</p>
 </section>
 
 <section>
@@ -257,7 +257,7 @@ footer a:hover {
 <section>
   <h2>Self-protection</h2>
   <p>Nullbot is blocked from reading its own config, dumping its own environment variables, accessing its own API keys, or modifying its own binary. It runs as a dedicated system user with no login shell and minimal filesystem access.</p>
-  <p>Output is scanned for common credential patterns before results leave the process. Binary integrity is verified at startup.</p>
+  <p>Nullbot does not modify configuration files, system settings, or its own policy. Output is scanned for common credential patterns before results leave the process. Binary integrity is verified against a build-time hash at startup. <a href="https://github.com/ppiankov/chainwatch/blob/main/docs/security-model.md">Full security model</a>.</p>
 </section>
 
 <section>
